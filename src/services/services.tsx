@@ -26,3 +26,13 @@ export async function addTask(taskData: TaskData) {
         return null;
     }
 }
+
+export async function deleteTask(taskId: number) {
+    try {
+        const response = await axios.delete(`https://teste-fatto-api-ad1y.onrender.com/tarefas/${taskId}`)
+        return response.data
+    } catch (error) {
+        console.error("Erro ao excluir tarefa", error);
+        return null        
+    }
+}

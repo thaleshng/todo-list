@@ -1,9 +1,14 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons'
 
+import { ConfirmModal } from '../ConfirmModal/ConfirmModal';
+
+import { useState } from 'react';
+
 import styled from "styled-components"
 
 interface Task {
+    id: number,
     nome: string,
     custo: string,
     data_limite: string,
@@ -11,9 +16,26 @@ interface Task {
 
 interface ListItemProps {
     tasks: Task[];
+    onDeleteTask: (taskId: number) => void;
 }
 
-export const ListItem = ({ tasks }: ListItemProps) => {
+export const ListItem = ({ tasks, onDeleteTask }: ListItemProps) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [taskToDelete, setTaskToDelete] = useState<number | null>(null);
+
+    const handleDeleteClick = (taskId: number) => {
+        setTaskToDelete(taskId);
+        setIsModalOpen(true);
+    };
+
+    const confirmDelete = () => {
+        if (taskToDelete !== null) {
+            onDeleteTask(taskToDelete);
+        }
+        setIsModalOpen(false);
+        setTaskToDelete(null);
+    };
+
     return (
         <>
             {tasks.map((task: Task, index) => (
@@ -26,10 +48,14 @@ export const ListItem = ({ tasks }: ListItemProps) => {
 
                     <DivIcons>
                         <button title='Editar Tarefa'><FontAwesomeIcon icon={faPenToSquare} /></button>
-                        <button title='Excluir Tarefa'><FontAwesomeIcon icon={faTrashCan} /></button>
+                        <button title='Excluir Tarefa' onClick={() => handleDeleteClick(task.id)}><FontAwesomeIcon icon={faTrashCan} /></button>
                     </DivIcons>
                 </Li>
             ))}
+
+            {isModalOpen && (
+                <ConfirmModal message='Tem certeza de que deseja excluir essa tarefa?' onConfirm={confirmDelete} onCancel={() => setIsModalOpen(false)} />
+            )}
         </>
         
     )

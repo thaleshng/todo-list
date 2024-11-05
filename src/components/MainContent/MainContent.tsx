@@ -4,17 +4,24 @@ import { faExchangeAlt, faPlus } from "@fortawesome/free-solid-svg-icons";
 import styled from 'styled-components'
 
 import { List } from '../List/List'
-import { addTask } from '../../services/getTasks';
-import { getTasks } from '../../services/getTasks';
+import { getTasks, addTask, deleteTask } from '../../services/services';
 
 import { useState, useEffect } from 'react';
 
+interface Task {
+    id: number;
+    nome: string;
+    custo: string;
+    data_limite: string;
+}
+
+
 export const MainContent = () => {
     const [ isModalOpen, setIsModalOpen ] = useState(false)
-    const [tasks, setTasks] = useState([])  ;
-    const [nome, setNome] = useState("");
-    const [custo, setCusto] = useState<number | string>("");
-    const [data_limite, setDataLimite] = useState("");
+    const [ tasks, setTasks ] = useState<Task[]>([]);
+    const [ nome, setNome ] = useState("");
+    const [ custo, setCusto ] = useState<number | string>("");
+    const [ data_limite, setDataLimite ] = useState("");
 
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen)
@@ -44,10 +51,17 @@ export const MainContent = () => {
         }
     }
 
+    const handleDeleteTask = async (taskId: number) => {
+        const response = await deleteTask(taskId)
+        if (response) {
+            setTasks(tasks.filter(task => task.id !== taskId))
+        }
+    }
+
     return (
         <Main>
             <H1>✔ To-Do List</H1>
-            <List tasks={tasks} />    
+            <List tasks={tasks} onDeleteTask={handleDeleteTask} />    
             <Div>
                 <AddTaskButton title='Adicionar uma nova Tarefa' onClick={toggleModal}>
                     <FontAwesomeIcon icon={ faPlus } />
@@ -229,19 +243,19 @@ const DivButtons = styled.div`
 
     > button:first-child {
         background-color: #28a745;
-    }
 
-    > button:first-child:hover {
-        background-color: #218838;
-        box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+        &:hover {
+            background-color: #218838;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+        }
     }
 
     > button:last-child {
         background-color: #dc3545;
-    }
 
-    > button:last-child:hover {
-        background-color: #c82333;
-        box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
+        &:hover {
+            background-color: #c82333;
+            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
+        }
     }
 `
