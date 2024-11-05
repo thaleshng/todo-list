@@ -1,10 +1,20 @@
 import styled from "styled-components"
 import { ListItem } from "../ListItem/ListItem"
 
-export const List = () => {
+interface Task {
+    nome: string;
+    custo: string;
+    data_limite: string;
+}
+
+interface ListProps {
+    tasks: Task[];
+}
+
+export const List = ({ tasks }: ListProps ) => {
     return (
         <Ul>
-            <ListItem />
+            <ListItem tasks={tasks} />
         </Ul>
     )
 }
