@@ -83,7 +83,7 @@ export const MainContent = () => {
 
     const handleReorderTasks = (updatedTasks: Task[]) => {
         setTasks(updatedTasks);
-        reorderTasks(updatedTasks); // Chamada ao serviço para salvar a nova ordem
+        reorderTasks(updatedTasks);
     };
 
     const toggleReorderMode = () => {

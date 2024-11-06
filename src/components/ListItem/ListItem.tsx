@@ -4,7 +4,7 @@ import { faPenToSquare, faTrashCan, faArrowUp, faArrowDown, faGripVertical } fro
 import { ConfirmModal } from '../ConfirmModal/ConfirmModal';
 import { useState } from 'react';
 
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 interface Task {
     id: number,
@@ -39,13 +39,13 @@ export const ListItem = ({ task, index, totalTasks, onDeleteTask, onEditTask, is
     return (
         <>
             <Li>
-                <DivTaskInfo>
+                <DivTaskInfo isHighCost={task.custo >= 1000}>
                     <h3>{task.nome}</h3>
                     <p>Custo: R$ {task.custo}</p>
                     <p>Data Limite: {new Date(task.data_limite).toLocaleDateString()}</p>
                 </DivTaskInfo>
 
-                <DivIcons>
+                <DivIcons isReorderMode={isReorderMode}>
                     {isReorderMode ? (
                         <>
                             <button title="Mover para Cima" onClick={() => onMoveTaskUp(task.id)} disabled={index === 0}>
@@ -86,11 +86,14 @@ const Li = styled.li`
     gap: 20px;
 
     > div:first-child:hover {
-        box-shadow: 0 4px 12px rgba(119, 119, 119, 0.5);
+        
     }
 `
+interface DivTaskInfoProps {
+    isHighCost: boolean;
+}
 
-const DivTaskInfo = styled.div`
+const DivTaskInfo = styled.div<DivTaskInfoProps>`
     display: flex;
     flex-direction: column;
 
@@ -103,6 +106,22 @@ const DivTaskInfo = styled.div`
 
     transition: 0.3s ease-in;
 
+    &:hover {
+        box-shadow: 0 4px 12px rgba(119, 119, 119, 0.5);
+    }
+
+    ${({ isHighCost }) =>
+        isHighCost &&
+        css`
+            background-color: rgba(255, 235, 59, 0.8);
+            color: #000;
+
+        &:hover {
+            box-shadow: 0 4px 12px rgba(255, 235, 59, 0.7);
+    }
+        `
+    }
+
     > h3 {
         margin-bottom: 10px;
         pointer-events: none;
@@ -113,10 +132,23 @@ const DivTaskInfo = styled.div`
         pointer-events: none;
     }
 `
+interface DivIconsProps {
+    isReorderMode: boolean;
+}
 
-const DivIcons = styled.div`
+const DivIcons = styled.div<DivIconsProps>`
     display: flex;
     gap: 10px;
+
+    > button:first-child {
+        ${({ isReorderMode }) =>
+            isReorderMode &&
+            css`
+                > svg {
+                    left: 0px;
+                }
+            `}
+    }
 
     > button:first-child > svg {
         position: relative;
@@ -129,9 +161,16 @@ const DivIcons = styled.div`
         background-color: #777;
         border-radius: 10px;
         transition: 0.3s ease-in-out;
+
+        &:disabled {
+            cursor: not-allowed;
+            background-color: #aaa;
+            color: #666;
+            box-shadow: none; 
+        }
     }
 
-    > button:hover {
+    > button:hover:not(:disabled) {
         box-shadow: 0 4px 12px rgba(119, 119, 119, 0.5);
         background-color: #CCC;
         color: #000;
