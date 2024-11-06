@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons'
+import { faArrowUp, faArrowDown, faGripVertical } from '@fortawesome/free-solid-svg-icons'
 
 import { ConfirmModal } from '../ConfirmModal/ConfirmModal';
 
@@ -10,7 +11,7 @@ import styled from "styled-components"
 interface Task {
     id: number,
     nome: string,
-    custo: string,
+    custo: number,
     data_limite: string,
 }
 
@@ -18,9 +19,12 @@ interface ListItemProps {
     tasks: Task[];
     onDeleteTask: (taskId: number) => void;
     onEditTask: (task: Task) => void;
+    isReorderMode: boolean;
+    onMoveTaskUp: (taskId: number) => void;
+    onMoveTaskDown: (taskId: number) => void;
 }
 
-export const ListItem = ({ tasks, onDeleteTask, onEditTask }: ListItemProps) => {
+export const ListItem = ({ tasks, onDeleteTask, onEditTask, isReorderMode, onMoveTaskUp, onMoveTaskDown }: ListItemProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [taskToDelete, setTaskToDelete] = useState<number | null>(null);
 
@@ -48,8 +52,28 @@ export const ListItem = ({ tasks, onDeleteTask, onEditTask }: ListItemProps) => 
                     </DivTaskInfo>
 
                     <DivIcons>
-                        <button title='Editar Tarefa' onClick={() => onEditTask(task)}><FontAwesomeIcon icon={faPenToSquare} /></button>
-                        <button title='Excluir Tarefa' onClick={() => handleDeleteClick(task.id)}><FontAwesomeIcon icon={faTrashCan} /></button>
+                        {isReorderMode ? (
+                            <>
+                                <button title="Mover para Cima" onClick={() => onMoveTaskUp(task.id)} disabled={index === 0}>
+                                    <FontAwesomeIcon icon={faArrowUp} />
+                                </button>
+                                <button title="Mover para Baixo" onClick={() => onMoveTaskDown(task.id)} disabled={index === tasks.length - 1}>
+                                    <FontAwesomeIcon icon={faArrowDown} />
+                                </button>
+                                <button title="Arrastar">
+                                    <FontAwesomeIcon icon={faGripVertical} />
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <button title="Editar Tarefa" onClick={() => onEditTask(task)}>
+                                    <FontAwesomeIcon icon={faPenToSquare} />
+                                </button>
+                                <button title="Excluir Tarefa" onClick={() => handleDeleteClick(task.id)}>
+                                    <FontAwesomeIcon icon={faTrashCan} />
+                                </button>
+                            </>
+                        )}
                     </DivIcons>
                 </Li>
             ))}

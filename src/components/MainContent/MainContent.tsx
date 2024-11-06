@@ -4,26 +4,27 @@ import { faExchangeAlt, faPlus } from "@fortawesome/free-solid-svg-icons";
 import styled from 'styled-components'
 
 import { List } from '../List/List'
-import { getTasks, addTask, deleteTask, editTask } from '../../services/services';
+import { getTasks, addTask, deleteTask, editTask, moveTaskUp, moveTaskDown, reorderTasks } from '../../services/services';
 
 import { useState, useEffect } from 'react';
 
 interface Task {
     id: number;
     nome: string;
-    custo: string;
+    custo: number;
     data_limite: string;
 }
 
 
 export const MainContent = () => {
     const [ isModalOpen, setIsModalOpen ] = useState(false)
-    const [isEditMode, setIsEditMode] = useState(false);
+    const [ isEditMode, setIsEditMode ] = useState(false);
+    const [ isReorderMode, setIsReorderMode ] = useState(false);
     const [ tasks, setTasks ] = useState<Task[]>([]);
     const [ nome, setNome ] = useState("");
     const [ custo, setCusto ] = useState<number | string>("");
     const [ data_limite, setDataLimite ] = useState("");
-    const [taskToEdit, setTaskToEdit] = useState<Task | null>(null);
+    const [ taskToEdit, setTaskToEdit ] = useState<Task | null>(null);
 
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen);
@@ -80,17 +81,47 @@ export const MainContent = () => {
         }
     }
 
+    const toggleReorderMode = () => {
+        setIsReorderMode(!isReorderMode);
+    }
+
+    const handleMoveTaskUp = async (taskId: number) => {
+        await moveTaskUp(taskId);
+        fetchTasks();
+    }
+
+    const handleMoveTaskDown = async (taskId: number) => {
+        await moveTaskDown(taskId);
+        fetchTasks();
+    }
+
+    const saveReorder = async () => {
+        await reorderTasks(tasks);
+        setIsReorderMode(false);
+        fetchTasks();
+    }
+
     return (
         <Main>
             <H1>✔ To-Do List</H1>
-            <List tasks={tasks} onDeleteTask={handleDeleteTask} onEditTask={openEditModal} />    
+            <List 
+                tasks={tasks} 
+                onDeleteTask={handleDeleteTask} 
+                onEditTask={openEditModal} 
+                isReorderMode={isReorderMode}
+                onMoveTaskUp={handleMoveTaskUp}
+                onMoveTaskDown={handleMoveTaskDown}
+            />    
             <Div>
                 <AddTaskButton title='Adicionar uma nova Tarefa' onClick={toggleModal}>
                     <FontAwesomeIcon icon={ faPlus } />
                 </AddTaskButton>
-                <ReOrderButton title='Reordenar Tarefas'>
+                <ReOrderButton title='Reordenar Tarefas' onClick={toggleReorderMode}>
                     <FontAwesomeIcon icon={ faExchangeAlt } />
                 </ReOrderButton>
+                {isReorderMode && (
+                    <SaveReorderButton onClick={saveReorder}>Salvar Ordem</SaveReorderButton>
+                )}
             </Div>
 
             {isModalOpen && (
@@ -187,6 +218,21 @@ const ReOrderButton = styled.button`
         height: 22px;
     }
 `
+
+const SaveReorderButton = styled.button`
+    padding: 10px;
+    background-color: #28a745;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 10px;
+
+    &:hover {
+        background-color: #218838;
+    }
+`;
+
 const H2 = styled.h2`
     margin-bottom: 15px;
     text-align: center;
