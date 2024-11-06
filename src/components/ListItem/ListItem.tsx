@@ -1,12 +1,10 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons'
-import { faArrowUp, faArrowDown, faGripVertical } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare, faTrashCan, faArrowUp, faArrowDown, faGripVertical } from '@fortawesome/free-solid-svg-icons';
 
 import { ConfirmModal } from '../ConfirmModal/ConfirmModal';
-
 import { useState } from 'react';
 
-import styled from "styled-components"
+import styled from "styled-components";
 
 interface Task {
     id: number,
@@ -16,7 +14,9 @@ interface Task {
 }
 
 interface ListItemProps {
-    tasks: Task[];
+    task: Task;
+    index: number;
+    totalTasks: number;
     onDeleteTask: (taskId: number) => void;
     onEditTask: (task: Task) => void;
     isReorderMode: boolean;
@@ -24,67 +24,59 @@ interface ListItemProps {
     onMoveTaskDown: (taskId: number) => void;
 }
 
-export const ListItem = ({ tasks, onDeleteTask, onEditTask, isReorderMode, onMoveTaskUp, onMoveTaskDown }: ListItemProps) => {
+export const ListItem = ({ task, index, totalTasks, onDeleteTask, onEditTask, isReorderMode, onMoveTaskUp, onMoveTaskDown }: ListItemProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [taskToDelete, setTaskToDelete] = useState<number | null>(null);
 
-    const handleDeleteClick = (taskId: number) => {
-        setTaskToDelete(taskId);
+    const handleDeleteClick = () => {
         setIsModalOpen(true);
     };
 
     const confirmDelete = () => {
-        if (taskToDelete !== null) {
-            onDeleteTask(taskToDelete);
-        }
+        onDeleteTask(task.id);
         setIsModalOpen(false);
-        setTaskToDelete(null);
     };
 
     return (
         <>
-            {tasks.map((task: Task, index) => (
-                <Li key={index}>
-                    <DivTaskInfo>
-                        <h3>{task.nome}</h3>
-                        <p>Custo: R$ {task.custo}</p>
-                        <p>Data Limite: {new Date(task.data_limite).toLocaleDateString()}</p>
-                    </DivTaskInfo>
+            <Li>
+                <DivTaskInfo>
+                    <h3>{task.nome}</h3>
+                    <p>Custo: R$ {task.custo}</p>
+                    <p>Data Limite: {new Date(task.data_limite).toLocaleDateString()}</p>
+                </DivTaskInfo>
 
-                    <DivIcons>
-                        {isReorderMode ? (
-                            <>
-                                <button title="Mover para Cima" onClick={() => onMoveTaskUp(task.id)} disabled={index === 0}>
-                                    <FontAwesomeIcon icon={faArrowUp} />
-                                </button>
-                                <button title="Mover para Baixo" onClick={() => onMoveTaskDown(task.id)} disabled={index === tasks.length - 1}>
-                                    <FontAwesomeIcon icon={faArrowDown} />
-                                </button>
-                                <button title="Arrastar">
-                                    <FontAwesomeIcon icon={faGripVertical} />
-                                </button>
-                            </>
-                        ) : (
-                            <>
-                                <button title="Editar Tarefa" onClick={() => onEditTask(task)}>
-                                    <FontAwesomeIcon icon={faPenToSquare} />
-                                </button>
-                                <button title="Excluir Tarefa" onClick={() => handleDeleteClick(task.id)}>
-                                    <FontAwesomeIcon icon={faTrashCan} />
-                                </button>
-                            </>
-                        )}
-                    </DivIcons>
-                </Li>
-            ))}
+                <DivIcons>
+                    {isReorderMode ? (
+                        <>
+                            <button title="Mover para Cima" onClick={() => onMoveTaskUp(task.id)} disabled={index === 0}>
+                                <FontAwesomeIcon icon={faArrowUp} />
+                            </button>
+                            <button title="Mover para Baixo" onClick={() => onMoveTaskDown(task.id)} disabled={index === totalTasks - 1}>
+                                <FontAwesomeIcon icon={faArrowDown} />
+                            </button>
+                            <button title="Arrastar">
+                                <FontAwesomeIcon icon={faGripVertical} />
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <button title="Editar Tarefa" onClick={() => onEditTask(task)}>
+                                <FontAwesomeIcon icon={faPenToSquare} />
+                            </button>
+                            <button title="Excluir Tarefa" onClick={handleDeleteClick}>
+                                <FontAwesomeIcon icon={faTrashCan} />
+                            </button>
+                        </>
+                    )}
+                </DivIcons>
+            </Li>
 
             {isModalOpen && (
                 <ConfirmModal message='Tem certeza de que deseja excluir essa tarefa?' onConfirm={confirmDelete} onCancel={() => setIsModalOpen(false)} />
             )}
         </>
-        
-    )
-}
+    );
+};
 
 const Li = styled.li`
     list-style-type: none;

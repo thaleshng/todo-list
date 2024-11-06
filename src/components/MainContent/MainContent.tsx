@@ -81,6 +81,11 @@ export const MainContent = () => {
         }
     }
 
+    const handleReorderTasks = (updatedTasks: Task[]) => {
+        setTasks(updatedTasks);
+        reorderTasks(updatedTasks); // Chamada ao serviço para salvar a nova ordem
+    };
+
     const toggleReorderMode = () => {
         setIsReorderMode(!isReorderMode);
     }
@@ -111,6 +116,7 @@ export const MainContent = () => {
                 isReorderMode={isReorderMode}
                 onMoveTaskUp={handleMoveTaskUp}
                 onMoveTaskDown={handleMoveTaskDown}
+                onReorderTasks={handleReorderTasks}
             />    
             <Div>
                 <AddTaskButton title='Adicionar uma nova Tarefa' onClick={toggleModal}>
