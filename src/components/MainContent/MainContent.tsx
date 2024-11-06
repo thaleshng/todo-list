@@ -119,14 +119,18 @@ export const MainContent = () => {
                 onReorderTasks={handleReorderTasks}
             />    
             <Div>
-                <AddTaskButton title='Adicionar uma nova Tarefa' onClick={toggleModal}>
-                    <FontAwesomeIcon icon={ faPlus } />
+                <AddTaskButton
+                    title='Adicionar uma nova Tarefa'
+                    onClick={toggleModal}
+                    style={{ visibility: isReorderMode ? 'hidden' : 'visible' }}
+                >
+                    <FontAwesomeIcon icon={faPlus} />
                 </AddTaskButton>
-                <ReOrderButton title='Reordenar Tarefas' onClick={toggleReorderMode}>
-                    <FontAwesomeIcon icon={ faExchangeAlt } />
+                <ReOrderButton title='Reordenar Tarefas' onClick={toggleReorderMode} style={{ visibility: isReorderMode ? 'hidden' : 'visible' }}>
+                    <FontAwesomeIcon icon={faExchangeAlt} />
                 </ReOrderButton>
                 {isReorderMode && (
-                    <SaveReorderButton onClick={saveReorder}>Salvar Ordem</SaveReorderButton>
+                    <SaveReorderButton onClick={saveReorder}>Salvar</SaveReorderButton>
                 )}
             </Div>
 
@@ -187,12 +191,6 @@ const Div = styled.div`
     gap: 20px;
     align-items: center;
     margin-top: 20px;
-
-    > button:hover {
-        box-shadow: 0 4px 12px rgba(119, 119, 119, 0.5);
-        background-color: #CCC;
-        color: #000;
-    }
 `
 
 const AddTaskButton = styled.button`
@@ -202,8 +200,14 @@ const AddTaskButton = styled.button`
     text-align: center;
     font-size: 40px;
     color: #FFF;
-    transition: 0.3s ease-in;
+    transition: background 0.3s ease-in;
     cursor: pointer;
+
+    &:hover {
+        box-shadow: 0 4px 12px rgba(119, 119, 119, 0.5);
+        background-color: #CCC;
+        color: #000;
+    }
 
     > svg {
         pointer-events: none;
@@ -216,7 +220,13 @@ const ReOrderButton = styled.button`
         padding: 7px;
         background-color: #777;
         border-radius: 10px;
-        transition: 0.3s ease-in-out;
+        transition: background 0.3s ease-in;
+
+    &:hover {
+        box-shadow: 0 4px 12px rgba(119, 119, 119, 0.5);
+        background-color: #CCC;
+        color: #000;
+    }
     
     > svg {
         transform: rotate(90deg);
@@ -232,10 +242,13 @@ const SaveReorderButton = styled.button`
     color: white;
     font-weight: bold;
     cursor: pointer;
-    margin-left: 10px;
+    transition: background 0.3s ease-in;
+    position: relative;
+    right: 25px;
 
     &:hover {
         background-color: #218838;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
     }
 `;
 
@@ -275,7 +288,6 @@ const ModalContent = styled.div`
         padding: 3px 6px;
         border-radius: 5px;
         border: 1px solid #777;
-        /* color: #777; */
 
         &::placeholder {
             font-style: italic;
@@ -310,9 +322,8 @@ const DivButtons = styled.div`
         padding: 10px 15px;
         font-size: 16px;
         cursor: pointer;
-        transition: 0.3s ease-in-out;
+        transition: background 0.3s ease-in;
         border-radius: 20px;
-        /* background-color: #777 */
     }
 
     > button:first-child {

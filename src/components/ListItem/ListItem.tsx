@@ -6,6 +6,8 @@ import { useState } from 'react';
 
 import styled, { css } from "styled-components";
 
+import { DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
+
 interface Task {
     id: number,
     nome: string,
@@ -22,9 +24,10 @@ interface ListItemProps {
     isReorderMode: boolean;
     onMoveTaskUp: (taskId: number) => void;
     onMoveTaskDown: (taskId: number) => void;
+    dragHandleProps?: DraggableProvidedDragHandleProps;
 }
 
-export const ListItem = ({ task, index, totalTasks, onDeleteTask, onEditTask, isReorderMode, onMoveTaskUp, onMoveTaskDown }: ListItemProps) => {
+export const ListItem = ({ task, index, totalTasks, onDeleteTask, onEditTask, isReorderMode, onMoveTaskUp, onMoveTaskDown, dragHandleProps }: ListItemProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleDeleteClick = () => {
@@ -54,7 +57,7 @@ export const ListItem = ({ task, index, totalTasks, onDeleteTask, onEditTask, is
                             <button title="Mover para Baixo" onClick={() => onMoveTaskDown(task.id)} disabled={index === totalTasks - 1}>
                                 <FontAwesomeIcon icon={faArrowDown} />
                             </button>
-                            <button title="Arrastar">
+                            <button title="Arrastar" {...(dragHandleProps ?? {})} style={{ cursor: isReorderMode ? 'grab' : 'default' }}>
                                 <FontAwesomeIcon icon={faGripVertical} />
                             </button>
                         </>
@@ -104,7 +107,7 @@ const DivTaskInfo = styled.div<DivTaskInfoProps>`
     
     padding: 10px;
 
-    transition: 0.3s ease-in;
+    transition: background 0.3s ease-in;
 
     &:hover {
         box-shadow: 0 4px 12px rgba(119, 119, 119, 0.5);
@@ -160,7 +163,7 @@ const DivIcons = styled.div<DivIconsProps>`
         padding: 7px;
         background-color: #777;
         border-radius: 10px;
-        transition: 0.3s ease-in-out;
+        transition: background 0.3s ease-in;
 
         &:disabled {
             cursor: not-allowed;

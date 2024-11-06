@@ -56,7 +56,6 @@ export const List = ({ tasks, onDeleteTask, onEditTask, isReorderMode, onMoveTas
                                             <div
                                                 ref={provided.innerRef}
                                                 {...provided.draggableProps}
-                                                {...provided.dragHandleProps}
                                             >
                                                 <ListItem
                                                     task={task}
@@ -67,6 +66,7 @@ export const List = ({ tasks, onDeleteTask, onEditTask, isReorderMode, onMoveTas
                                                     isReorderMode={isReorderMode}
                                                     onMoveTaskUp={onMoveTaskUp}
                                                     onMoveTaskDown={onMoveTaskDown}
+                                                    dragHandleProps={provided.dragHandleProps ?? undefined}
                                                 />
                                             </div>
                                         );
