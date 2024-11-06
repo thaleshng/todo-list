@@ -4,7 +4,7 @@ import { faExchangeAlt, faPlus } from "@fortawesome/free-solid-svg-icons";
 import styled from 'styled-components'
 
 import { List } from '../List/List'
-import { getTasks, addTask, deleteTask } from '../../services/services';
+import { getTasks, addTask, deleteTask, editTask } from '../../services/services';
 
 import { useState, useEffect } from 'react';
 
@@ -18,14 +18,27 @@ interface Task {
 
 export const MainContent = () => {
     const [ isModalOpen, setIsModalOpen ] = useState(false)
+    const [isEditMode, setIsEditMode] = useState(false);
     const [ tasks, setTasks ] = useState<Task[]>([]);
     const [ nome, setNome ] = useState("");
     const [ custo, setCusto ] = useState<number | string>("");
     const [ data_limite, setDataLimite ] = useState("");
+    const [taskToEdit, setTaskToEdit] = useState<Task | null>(null);
 
     const toggleModal = () => {
-        setIsModalOpen(!isModalOpen)
+        setIsModalOpen(!isModalOpen);
+        setIsEditMode(false);
+        setTaskToEdit(null);
     }
+
+    const openEditModal = (task: Task) => {
+        setIsEditMode(true);
+        setIsModalOpen(true);
+        setTaskToEdit(task);
+        setNome(task.nome);
+        setCusto(task.custo);
+        setDataLimite(new Date(task.data_limite).toISOString().split("T")[0]);
+    };
 
     const fetchTasks = async () => {
         const data = await getTasks();
@@ -40,15 +53,24 @@ export const MainContent = () => {
         e.preventDefault();
         const taskData = { nome, custo: Number(custo), data_limite }
 
-        const response = await addTask(taskData);
-        if (response) {
-            console.log("Tarefa adicionada com sucesso:", response);
+        if (isEditMode && taskToEdit) {
+            const response = await editTask(taskToEdit.id, taskData)
+            if (response) {
+                console.log("Tarefa editada com sucesso", response);
+                fetchTasks();
+            }
+        } else {
+            const response = await addTask(taskData);
+            if (response) {
+                console.log("Tarefa adicionada com sucesso:", response);
+                fetchTasks();
+            }
+        }
+
             toggleModal();
             setNome("");
             setCusto("");
             setDataLimite("");
-            fetchTasks();
-        }
     }
 
     const handleDeleteTask = async (taskId: number) => {
@@ -61,7 +83,7 @@ export const MainContent = () => {
     return (
         <Main>
             <H1>✔ To-Do List</H1>
-            <List tasks={tasks} onDeleteTask={handleDeleteTask} />    
+            <List tasks={tasks} onDeleteTask={handleDeleteTask} onEditTask={openEditModal} />    
             <Div>
                 <AddTaskButton title='Adicionar uma nova Tarefa' onClick={toggleModal}>
                     <FontAwesomeIcon icon={ faPlus } />
@@ -74,7 +96,7 @@ export const MainContent = () => {
             {isModalOpen && (
                 <ModalBackground onClick={toggleModal}>
                     <ModalContent onClick={(e) => e.stopPropagation()}>
-                        <H2>Adicionar Nova Tarefa</H2>
+                        <H2>{isEditMode ? "Editar Tarefa" : "Adiciona Nova Tarefa"}</H2>
                         <form onSubmit={handleSubmit}>
                             <input
                                 type="text" 
@@ -99,7 +121,7 @@ export const MainContent = () => {
                                 required
                             />
                             <DivButtons>
-                                <button type="submit">Adicionar</button>
+                                <button type="submit">{isEditMode ? "Salvar" : "Adicionar"}</button>
                                 <button onClick={toggleModal}>Fechar</button>
                             </DivButtons>
                         </form>

@@ -36,3 +36,13 @@ export async function deleteTask(taskId: number) {
         return null        
     }
 }
+
+export async function editTask(taskId: number, taskData: TaskData) {
+    try {
+        const response = await axios.put(`https://teste-fatto-api-ad1y.onrender.com/tarefas/${taskId}`, taskData)
+        return response.data
+    } catch (error) {
+        console.error("Erro ao editar tarefa", error);
+        return null
+    }
+}

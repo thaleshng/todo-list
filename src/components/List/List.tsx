@@ -10,13 +10,14 @@ interface Task {
 
 interface ListProps {
     tasks: Task[];
-    onDeleteTask: (taskId: number) => void
+    onDeleteTask: (taskId: number) => void;
+    onEditTask: (task: Task) => void;
 }
 
-export const List = ({ tasks, onDeleteTask }: ListProps ) => {
+export const List = ({ tasks, onDeleteTask, onEditTask }: ListProps ) => {
     return (
         <Ul>
-            <ListItem tasks={tasks} onDeleteTask={onDeleteTask} />
+            <ListItem tasks={tasks} onDeleteTask={onDeleteTask} onEditTask={onEditTask} />
         </Ul>
     )
 }

@@ -17,9 +17,10 @@ interface Task {
 interface ListItemProps {
     tasks: Task[];
     onDeleteTask: (taskId: number) => void;
+    onEditTask: (task: Task) => void;
 }
 
-export const ListItem = ({ tasks, onDeleteTask }: ListItemProps) => {
+export const ListItem = ({ tasks, onDeleteTask, onEditTask }: ListItemProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [taskToDelete, setTaskToDelete] = useState<number | null>(null);
 
@@ -47,7 +48,7 @@ export const ListItem = ({ tasks, onDeleteTask }: ListItemProps) => {
                     </DivTaskInfo>
 
                     <DivIcons>
-                        <button title='Editar Tarefa'><FontAwesomeIcon icon={faPenToSquare} /></button>
+                        <button title='Editar Tarefa' onClick={() => onEditTask(task)}><FontAwesomeIcon icon={faPenToSquare} /></button>
                         <button title='Excluir Tarefa' onClick={() => handleDeleteClick(task.id)}><FontAwesomeIcon icon={faTrashCan} /></button>
                     </DivIcons>
                 </Li>
