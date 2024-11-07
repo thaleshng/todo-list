@@ -120,15 +120,21 @@ export const MainContent = () => {
     return (
         <Main>
             <H1>✔ To-Do List</H1>
-            <List 
-                tasks={tasks} 
-                onDeleteTask={handleDeleteTask} 
-                onEditTask={openEditModal} 
-                isReorderMode={isReorderMode}
-                onMoveTaskUp={handleMoveTaskUp}
-                onMoveTaskDown={handleMoveTaskDown}
-                onReorderTasks={handleReorderTasks}
-            />    
+            {tasks.length === 0 ? (
+                <NoTasksMessage>
+                    Você ainda não há nenhuma tarefa adicionada, adicione no botão abaixo...
+                </NoTasksMessage>
+            ) : (
+                <List 
+                    tasks={tasks} 
+                    onDeleteTask={handleDeleteTask} 
+                    onEditTask={openEditModal} 
+                    isReorderMode={isReorderMode}
+                    onMoveTaskUp={handleMoveTaskUp}
+                    onMoveTaskDown={handleMoveTaskDown}
+                    onReorderTasks={handleReorderTasks}
+                />
+    )} 
             <Div>
                 <AddTaskButton
                     title='Adicionar uma nova Tarefa'
@@ -137,9 +143,15 @@ export const MainContent = () => {
                 >
                     <FontAwesomeIcon icon={faPlus} />
                 </AddTaskButton>
-                <ReOrderButton title='Reordenar Tarefas' onClick={toggleReorderMode} style={{ visibility: isReorderMode ? 'hidden' : 'visible' }}>
-                    <FontAwesomeIcon icon={faExchangeAlt} />
-                </ReOrderButton>
+                {tasks.length >= 2 && (
+                    <ReOrderButton 
+                        title='Reordenar Tarefas' 
+                        onClick={toggleReorderMode} 
+                        style={{ visibility: isReorderMode ? 'hidden' : 'visible' }}
+                    >
+                        <FontAwesomeIcon icon={faExchangeAlt} />
+                    </ReOrderButton>
+                )}
                 {isReorderMode && (
                     <SaveReorderButton onClick={saveReorder}>Salvar</SaveReorderButton>
                 )}
@@ -197,6 +209,13 @@ const H1 = styled.h1`
     text-align: center;
     padding: 20px 0;
 `
+
+const NoTasksMessage = styled.p`
+    font-size: 18px;
+    text-align: center;
+    margin-top: 20px;
+    color: #777;
+`;
 
 const Div = styled.div`
     display: flex;
