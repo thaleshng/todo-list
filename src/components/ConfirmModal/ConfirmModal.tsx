@@ -39,6 +39,10 @@ const ModalBox = styled.div`
     max-width: 400px;
     width: 100%;
     text-align: center;
+
+    @media (max-width: 420px) {
+        width: 90%;
+    }
 `;
 
 const ButtonGroup = styled.div`

@@ -438,6 +438,10 @@ const ModalContent = styled.div`
             box-shadow: 0 0 3px rgba(255, 255, 255, 0.7);
         }
     }
+
+    @media (max-width: 575px) {
+        width: 90%;
+    }
 `;
 
 const InputNumber = styled.input.attrs({ type: 'number' })`
