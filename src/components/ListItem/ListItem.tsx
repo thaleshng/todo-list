@@ -45,7 +45,7 @@ export const ListItem = ({ task, index, totalTasks, onDeleteTask, onEditTask, is
                 <DivTaskInfo isHighCost={task.custo >= 1000}>
                     <h3>{task.nome}</h3>
                     <p>Custo: R$ {task.custo}</p>
-                    <p>Data Limite: {new Date(task.data_limite).toLocaleDateString()}</p>
+                    <p>Data Limite: {new Date(task.data_limite).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</p>
                 </DivTaskInfo>
 
                 <DivIcons isReorderMode={isReorderMode}>

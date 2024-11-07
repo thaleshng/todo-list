@@ -30,6 +30,12 @@ export const MainContent = () => {
         setIsModalOpen(!isModalOpen);
         setIsEditMode(false);
         setTaskToEdit(null);
+
+        if (!isModalOpen) {
+            setNome("");
+            setCusto("");
+            setDataLimite("");
+        }
     }
 
     const openEditModal = (task: Task) => {
@@ -67,11 +73,7 @@ export const MainContent = () => {
                 fetchTasks();
             }
         }
-
             toggleModal();
-            setNome("");
-            setCusto("");
-            setDataLimite("");
     }
 
     const handleDeleteTask = async (taskId: number) => {
