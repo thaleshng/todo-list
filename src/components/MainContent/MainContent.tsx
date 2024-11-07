@@ -197,7 +197,8 @@ export const MainContent = () => {
                             />
                             <input 
                                 type="date" 
-                                name="data_limite"  
+                                name="data_limite"
+                                placeholder="Data Limite"
                                 value={data_limite}
                                 onChange={(e) => setDataLimite(e.target.value)}
                                 required
