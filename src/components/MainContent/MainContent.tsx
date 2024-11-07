@@ -7,6 +7,7 @@ import { List } from '../List/List'
 import { getTasks, addTask, deleteTask, editTask, moveTaskUp, moveTaskDown, reorderTasks } from '../../services/services';
 
 import { useState, useEffect } from 'react';
+import { AxiosError } from 'axios';
 
 interface Task {
     id: number;
@@ -25,11 +26,13 @@ export const MainContent = () => {
     const [ custo, setCusto ] = useState<number | string>("");
     const [ data_limite, setDataLimite ] = useState("");
     const [ taskToEdit, setTaskToEdit ] = useState<Task | null>(null);
+    const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
 
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen);
         setIsEditMode(false);
         setTaskToEdit(null);
+        setErrorMessage(null);
 
         if (!isModalOpen) {
             setNome("");
@@ -58,23 +61,29 @@ export const MainContent = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const taskData = { nome, custo: Number(custo), data_limite }
+        const taskData = { nome, custo: Number(custo), data_limite };
+    
+        try {
+            if (isEditMode && taskToEdit) {
+                await editTask(taskToEdit.id, taskData);
+                console.log("Tarefa editada com sucesso");
+            } else {
+                await addTask(taskData);
+                console.log("Tarefa adicionada com sucesso");
+            }
 
-        if (isEditMode && taskToEdit) {
-            const response = await editTask(taskToEdit.id, taskData)
-            if (response) {
-                console.log("Tarefa editada com sucesso", response);
-                fetchTasks();
-            }
-        } else {
-            const response = await addTask(taskData);
-            if (response) {
-                console.log("Tarefa adicionada com sucesso:", response);
-                fetchTasks();
-            }
-        }
+            fetchTasks();
             toggleModal();
-    }
+        } catch (error) {
+            const axiosError = error as AxiosError;
+
+        if (axiosError.response && axiosError.response.status === 409) {
+            setErrorMessage("Já existe uma tarefa cadastrada com esse nome.");
+        } else {
+            setErrorMessage("Ocorreu um erro ao salvar a tarefa. Tente novamente.");
+        }
+        }
+    };
 
     const handleDeleteTask = async (taskId: number) => {
         const response = await deleteTask(taskId)
@@ -163,6 +172,7 @@ export const MainContent = () => {
                                 onChange={(e) => setDataLimite(e.target.value)}
                                 required
                             />
+                            {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
                             <DivButtons>
                                 <button type="submit">{isEditMode ? "Salvar" : "Adicionar"}</button>
                                 <button onClick={toggleModal}>Fechar</button>
@@ -312,6 +322,13 @@ const InputNumber = styled.input.attrs({ type: 'number' })`
 
     appearance: textfield;
     -moz-appearance: textfield;
+`;
+
+const ErrorText = styled.p`
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
 `;
 
 const DivButtons = styled.div`

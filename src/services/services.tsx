@@ -23,7 +23,7 @@ export async function addTask(taskData: TaskData) {
         return response.data
     } catch (error) {
         console.error("Erro ao adicionar tarefa",error);
-        return null;
+        throw error;
     }
 }
 
@@ -43,7 +43,7 @@ export async function editTask(taskId: number, taskData: TaskData) {
         return response.data
     } catch (error) {
         console.error("Erro ao editar tarefa", error);
-        return null
+        throw error;
     }
 }
 
