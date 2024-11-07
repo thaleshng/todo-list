@@ -85,10 +85,8 @@ export const MainContent = () => {
         try {
             if (isEditMode && taskToEdit) {
                 await editTask(taskToEdit.id, taskData);
-                console.log("Tarefa editada com sucesso");
             } else {
                 await addTask(taskData);
-                console.log("Tarefa adicionada com sucesso");
             }
 
             fetchTasks();
@@ -187,6 +185,7 @@ export const MainContent = () => {
                                 placeholder="Nome da Tarefa"
                                 value={nome}
                                 onChange={(e) => setNome(e.target.value)}
+                                autoComplete="off"
                                 required
                             />
                             <InputNumber 
