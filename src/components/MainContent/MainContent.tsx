@@ -61,6 +61,26 @@ export const MainContent = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        const today = new Date();
+        const todayString = today.toISOString().split('T')[0];
+        const inputDateString = data_limite;
+
+        const errors = [];
+
+        if (inputDateString < todayString) {
+            errors.push("A data limite deve ser maior ou igual à data de hoje.");
+        }
+
+        if (Number(custo) < 0) {
+            errors.push("O custo não pode ser um valor negativo.");
+        }
+
+        if (errors.length > 0) {
+            setErrorMessage(errors.join(" "));
+            return;
+        }
+
         const taskData = { nome, custo: Number(custo), data_limite };
     
         try {
@@ -190,7 +210,6 @@ export const MainContent = () => {
                                 <button onClick={toggleModal}>Fechar</button>
                             </DivButtons>
                         </form>
-                        
                     </ModalContent>
                 </ModalBackground>
             )}

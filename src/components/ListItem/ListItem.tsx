@@ -100,7 +100,7 @@ const DivTaskInfo = styled.div<DivTaskInfoProps>`
     display: flex;
     flex-direction: column;
 
-    min-width: 800px;
+    width: 800px;
 
     border: 1px solid #777;
     border-radius: 10px;
@@ -108,6 +108,8 @@ const DivTaskInfo = styled.div<DivTaskInfoProps>`
     padding: 10px;
 
     transition: background 0.3s ease-in;
+
+    word-wrap: break-word;
 
     &:hover {
         box-shadow: 0 4px 12px rgba(119, 119, 119, 0.5);
@@ -121,8 +123,8 @@ const DivTaskInfo = styled.div<DivTaskInfoProps>`
 
         &:hover {
             box-shadow: 0 4px 12px rgba(255, 235, 59, 0.7);
-    }
-        `
+    }    
+`    
     }
 
     > h3 {
