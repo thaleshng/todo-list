@@ -16,7 +16,6 @@ interface Task {
     data_limite: string;
 }
 
-
 export const MainContent = () => {
     const [ isModalOpen, setIsModalOpen ] = useState(false)
     const [ isEditMode, setIsEditMode ] = useState(false);
@@ -142,7 +141,7 @@ export const MainContent = () => {
             <H1>✔ To-Do List</H1>
             {tasks.length === 0 ? (
                 <NoTasksMessage>
-                    Você ainda não há nenhuma tarefa adicionada, adicione no botão abaixo...
+                    Ainda não há nenhuma tarefa adicionada, clique no botão abaixo para adicionar...
                 </NoTasksMessage>
             ) : (
                 <List 
@@ -222,6 +221,7 @@ const Main = styled.main`
     padding: 0 50px 50px 50px;
     border-radius: 15px;
     box-shadow: 0 6px 15px rgba(24, 24, 24, 0.6);
+    margin-top: 20px;
 `
 
 const H1 = styled.h1`
