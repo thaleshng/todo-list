@@ -610,6 +610,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
     max-width: 400px;
     width: 100%;
     text-align: center;
+
+    @media (max-width: 420px) {
+        width: 90%;
+    }
 `,Z2=pe.div`
     display: flex;
     gap: 15px;
@@ -1023,6 +1027,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             outline: none;
             box-shadow: 0 0 3px rgba(255, 255, 255, 0.7);
         }
+    }
+
+    @media (max-width: 575px) {
+        width: 90%;
     }
 `,NR=pe.input.attrs({type:"number"})`
     &::-webkit-outer-spin-button,
