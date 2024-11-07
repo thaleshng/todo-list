@@ -220,7 +220,56 @@ const Main = styled.main`
     padding: 0 50px 50px 50px;
     border-radius: 15px;
     box-shadow: 0 6px 15px rgba(24, 24, 24, 0.6);
-    margin-top: 20px;
+    margin: 20px auto;
+    max-width: 1280px;
+    width: 100%;
+
+    @media (max-width: 1024px) {
+        padding: 0 20px 30px 20px;
+    }
+
+    @media (max-width: 960px) {
+        padding: 0 20px 30px 20px;
+        width: 90%;
+    }
+
+    @media (max-width: 900px) {
+        padding: 0 10px 20px 10px;
+        max-width: 800px;
+        width: 95%;
+    }
+
+    @media (max-width: 768px) {
+        width: 85%;
+    }
+
+    @media (max-width: 700px) {
+        max-width: 650px;
+        width: 85%;
+    }
+
+    @media (max-width: 575px) {
+        max-width: 650px;
+        width: 70%;
+    }
+
+    @media (max-width: 475px) {
+        max-width: 500px;
+        width: 80%;
+    }
+
+    @media (max-width: 425px) {
+        max-width: 450px;
+        width: 80%;
+    }
+
+    @media (max-width: 375px) {
+        max-width: 400px;
+    }
+
+    @media (max-width: 325px) {
+        max-width: 350px;
+    }
 `
 
 const H1 = styled.h1`
@@ -243,7 +292,6 @@ const Div = styled.div`
 `
 
 const AddTaskButton = styled.button`
-    min-width: 800px;
     border: 1px solid #777;
     border-radius: 10px;
     text-align: center;
@@ -251,6 +299,8 @@ const AddTaskButton = styled.button`
     color: #FFF;
     transition: background 0.3s ease-in;
     cursor: pointer;
+    max-width: 800px;
+    width: 100%;
 
     &:hover {
         box-shadow: 0 4px 12px rgba(119, 119, 119, 0.5);
@@ -261,6 +311,46 @@ const AddTaskButton = styled.button`
     > svg {
         pointer-events: none;
         padding: 8px 0;
+    }
+
+    @media (max-width: 1024px) {
+        width: 88.8%;
+    }
+
+    @media (max-width: 960px) {
+        width: 87.5%; 
+    }
+
+    @media (max-width: 900px) {
+        width: 86.5%;
+    }
+
+    @media (max-width: 768px) {
+        width: 84.5%;
+    }
+
+    @media (max-width: 700px) {
+        width: 81%;
+    }
+
+    @media (max-width: 575px) {
+        width: 76.5%;
+    }
+
+    @media (max-width: 475px) {
+        width: 73.5%;
+    }
+
+    @media (max-width: 425px) {
+        width: 70.5%;
+    }
+
+    @media (max-width: 375px) {
+        width: 66.5%;
+    }
+
+    @media (max-width: 325px) {
+        width: 61.5%;
     }
 `
 

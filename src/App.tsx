@@ -29,24 +29,20 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
-  #root {
-    max-width: 1280px;
+  body {
+    display: flex;
     margin: 0 auto;
+    min-width: 320px;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    
+    color-scheme: light dark;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
 
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;
-  }
-
-  body {
-    margin: 0;
-    display: flex;
-    place-items: center;
-    min-width: 320px;
-    min-height: 100vh;
-
-    color-scheme: light dark;
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #242424;
   }
 `
